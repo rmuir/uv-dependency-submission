@@ -1,0 +1,26 @@
+[project]
+name = "uv-dependency-submission"
+version = "1.0.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "ruff",
+  "basedpyright",
+]
+
+[tool.basedpyright]
+pythonVersion = "3.13"
+exclude = [
+  "data",
+  ".venv"
+]
+venvPath = "."
+venv = ".venv"
+typeCheckingMode = "strict"
+
+[tool.ruff]
+line-length = 120
