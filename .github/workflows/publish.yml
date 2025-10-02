@@ -1,0 +1,26 @@
+name: Publish
+
+on:
+  push:
+    tags: ["*"]
+
+permissions: {}
+
+jobs:
+  github:
+    name: Create Github release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # create github release
+      id-token: write # deploy
+      attestations: write # create attestations
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+
+      - name: Create release
+        run: gh release create "${GITHUB_REF_NAME}" --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
