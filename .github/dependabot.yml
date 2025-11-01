@@ -5,6 +5,8 @@ updates:
     schedule:
       interval: weekly
       day: sunday
+    cooldown:
+      default-days: 7
     commit-message:
       prefix: ci
     labels:

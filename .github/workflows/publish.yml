@@ -6,10 +6,15 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   github:
     name: Create Github release
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: write # create github release
       id-token: write # deploy
