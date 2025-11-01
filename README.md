@@ -14,10 +14,10 @@ name: Dependency Submission
 
 on:
   workflow_dispatch:
-  pull_request:
-    branches: ['main']
   push:
-    branches: ['main']
+    branches: ['main', 'master']
+    paths:
+      - '**/uv.lock'
 
 permissions: {}
 
