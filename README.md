@@ -21,10 +21,15 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   dependency-submission:
     name: Submit uv dependencies
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: write # needs to submit dependency graph data
     steps:
@@ -36,6 +41,9 @@ jobs:
       - name: Submit dependency snapshot
         uses: rmuir/uv-dependency-submission@1c48aaac13e566e39fd04269ff1900b86c1105c5 # v1.0.0
 ```
+
+> [!NOTE]
+> After adding the workflow, trigger once manually from Actions UI to confirm correct setup.
 
 # Configuration
 Currently there are no parameters.
@@ -53,7 +61,7 @@ Existing alternatives scan the dependencies and may issue many API calls to audi
 - https://github.com/owenlamont/uv-secure
 - https://github.com/nyudenkov/pysentry
 
-This action works differently: it does not audit your packages. 
+This action works differently: it does not audit your packages.
 It will make exactly one API call to publish the graph to Github: you can use Github's security tab to do the rest.
 
 # Caveats
