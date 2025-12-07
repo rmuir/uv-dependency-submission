@@ -60,6 +60,19 @@ jobs:
         run: make lint
         shell: bash
 
+  markdown-lint:
+    name: Lint markdown
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
+
+      - name: Run rumdl
+        uses: rvben/rumdl@8074f0494bd6ff03f7d5590a9beaeb124da702a1 # v0.0.190
+
   submit:
     name: Submit test data
     runs-on: ubuntu-latest
