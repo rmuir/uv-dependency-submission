@@ -1,7 +1,22 @@
 version: 2
 updates:
+  # CI only: action has no dependencies
   - package-ecosystem: github-actions
     directory: /
+    schedule:
+      interval: weekly
+      day: sunday
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: ci
+    labels:
+      - dependencies
+  # CI only: python code has no dependencies
+  - package-ecosystem: uv
+    directory: /
+    exclude-paths:
+      - test/**
     schedule:
       interval: weekly
       day: sunday
