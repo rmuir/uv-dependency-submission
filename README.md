@@ -16,12 +16,16 @@ Make sure you've enabled Dependency Graph in the Security section of the reposit
 name: Dependency Submission
 
 on:
+  # trigger manually (e.g. for initial setup)
   workflow_dispatch:
+  # trigger when uv.lock files change in the default branch.
   push:
     branches: ['main', 'master']
     paths:
       - '**/uv.lock'
 
+# Drop the broad default GITHUB_TOKEN permissions for least-privilege:
+# https://docs.zizmor.sh/audits/#excessive-permissions
 permissions: {}
 
 concurrency:
@@ -46,7 +50,7 @@ jobs:
 ```
 
 > [!NOTE]
-> After adding the workflow, trigger once manually from Actions UI to confirm correct setup.
+> After committing the workflow file, trigger once manually from Actions UI for initial setup.
 
 ## Configuration
 
