@@ -1,6 +1,6 @@
 version = 1
 revision = 3
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 
 [[package]]
 name = "basedpyright"
@@ -71,6 +71,6 @@ dev = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "basedpyright" },
-    { name = "ruff" },
+    { name = "basedpyright", specifier = "==1.31.6" },
+    { name = "ruff", specifier = "==0.13.2" },
 ]
