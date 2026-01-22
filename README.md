@@ -61,21 +61,17 @@ The `gh` cli is used to upload the snapshot, you can pass `env:` variables to ch
 
 ## Background
 
-If you have a uv-based project, by default only **direct** dependencies (from `pyproject.toml`) will show in the dependency graph
+If you have a uv-based project, GitHub will detect dependencies from `uv.lock` automatically.
 
-- <https://github.com/dependabot/dependabot-core/issues/11913>
+However, the built-in GitHub functionality is new and currently very minimal:
 
-By using this action, the full graph will be populated, enabling more of Github's security features.
+- Dependencies are submitted as a flat list from each `uv.lock`
+- No indication of Transitive vs Direct.
+- No SBOM paths (e.g. to see how particular dependency was brought in)
 
-## Alternatives
+The built-in GitHub functionality is enough for you to receive Dependabot security alerts.
 
-Existing alternatives scan the dependencies and may issue many API calls to audit packages:
-
-- <https://github.com/owenlamont/uv-secure>
-- <https://github.com/nyudenkov/pysentry>
-
-This action works differently: it does not audit your packages.
-It will make exactly one API call to publish the graph to Github: you can use Github's security tab to do the rest.
+By using this action, the full graph metadata will be populated, enabling more of Github's security features.
 
 ## Caveats
 
