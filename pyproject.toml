@@ -9,7 +9,7 @@ dependencies = []
 [dependency-groups]
 dev = [
   "ruff==0.14.13",
-  "basedpyright==1.37.1",
+  "basedpyright==1.37.2",
 ]
 
 [tool.basedpyright]
