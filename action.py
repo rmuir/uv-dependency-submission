@@ -7,6 +7,7 @@ import datetime
 import json
 import os
 import subprocess
+from time import sleep
 import tomllib
 from typing import Any
 
@@ -59,6 +60,30 @@ def uvlock_to_manifest(filename: str) -> dict[str, Any]:
         }
 
 
+RED = "\033[0;31m"
+END = "\033[0m"
+
+
+def retrying_check_output(cmd: list[str], *, input: str) -> str:
+    sleep_for = 1
+    last_err: Exception = ValueError("Invalid number of retries")
+    for i in range(10):
+        if i != 0:
+            print(f"{RED}Command failed, retrying in {sleep_for} seconds ({i + 1}/10)...{END}")
+            sleep(sleep_for)
+            sleep_for = min(30, sleep_for * 2)
+        try:
+            output = subprocess.check_output(cmd, input=input, stderr=subprocess.STDOUT, universal_newlines=True)
+            print("Dependency submission successful!")
+            return output
+        except subprocess.CalledProcessError as e:
+            last_err = e
+            print(e.output)
+
+    print(f"{RED}Command failed, no more retries{END}")
+    raise last_err
+
+
 def main():
     snapshot = {
         "version": 0,
@@ -99,7 +124,7 @@ def main():
         "-",
     ]
     try:
-        print(subprocess.check_output(cmd, input=postdata, stderr=subprocess.STDOUT, universal_newlines=True))
+        print(retrying_check_output(cmd, input=postdata))
     except subprocess.CalledProcessError as e:
         print(e.output)
         raise
