@@ -7,6 +7,7 @@ import datetime
 import json
 import os
 import subprocess
+import sys
 from time import sleep
 import tomllib
 from typing import Any
@@ -67,18 +68,23 @@ END = "\033[0m"
 def retrying_check_output(cmd: list[str], *, input: str) -> str:
     sleep_for = 1
     last_err: Exception = ValueError("Invalid number of retries")
-    for i in range(10):
+    retries = 5
+    retryable_statuses = ("500", "502")
+    for i in range(retries):
         if i != 0:
-            print(f"{RED}Command failed, retrying in {sleep_for} seconds ({i + 1}/10)...{END}")
+            print(f"{RED}Command failed, retrying in {sleep_for} seconds ({i + 1}/{retries})...{END}")
             sleep(sleep_for)
             sleep_for = min(30, sleep_for * 2)
         try:
-            output = subprocess.check_output(cmd, input=input, stderr=subprocess.STDOUT, universal_newlines=True)
+            output = subprocess.check_output(cmd, input=input, stderr=sys.stderr, universal_newlines=True)
             print("Dependency submission successful!")
             return output
         except subprocess.CalledProcessError as e:
             last_err = e
             print(e.output)
+            body = json.loads(e.output)
+            if body["status"] not in retryable_statuses:
+                raise
 
     print(f"{RED}Command failed, no more retries{END}")
     raise last_err
@@ -120,6 +126,8 @@ def main():
         "-H",
         "X-GitHub-Api-Version: 2022-11-28",
         f"/repos/{os.environ['GITHUB_REPOSITORY']}/dependency-graph/snapshots",
+        "--jq",
+        ".",
         "--input",
         "-",
     ]
