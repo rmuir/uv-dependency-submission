@@ -43,8 +43,8 @@ jobs:
         with:
           persona: pedantic
 
-  lint:
-    name: Run python linters
+  python:
+    name: Run python checks
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -56,8 +56,8 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # v8.0.0
 
-      - name: make lint
-        run: make lint
+      - name: Run make
+        run: make all
         shell: bash
 
   markdown-lint:
@@ -72,18 +72,3 @@ jobs:
 
       - name: Run rumdl
         uses: rvben/rumdl@96f0828bd8dd9ca31bb1b5c77f9c0cf305b45767 # v0.1.70
-
-  submit:
-    name: Submit test data
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions:
-      contents: write # needs to submit dependency graph data
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          persist-credentials: false
-
-      - name: Submit uv dependencies
-        uses: ./
