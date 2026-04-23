@@ -22,22 +22,15 @@ def uvlock_to_manifest(filename: str) -> dict[str, Any]:
         for package in data["package"]:
             dependencies[package["name"]] = package
 
+        # package.metadata.requires-* might contain orphan refs that aren't in "dependencies"
         for package in filter(lambda pkg: "metadata" in pkg, data["package"]):
-            # package.metadata.requires-dev exists even for dev dependencies of dependencies
-            # and those don't get installed. Let's skip them.
-            dev_dependencies: set[str] = set()
-            for dep in package.get("dev-dependencies", {}).get("dev", []):
-                dev_dependencies.add(dep["name"])
-
             # paint development deps first, if they are runtime, it will get overwritten
             for dep in package["metadata"].get("requires-dev", {}).get("dev", []):
-                if dep["name"] not in dev_dependencies:
-                    continue
-                entry = dependencies[dep["name"]]
+                entry = dependencies.get(dep["name"], {})
                 entry["relationship"] = "direct"
                 entry["scope"] = "development"
             for dep in package["metadata"].get("requires-dist", []):
-                entry = dependencies[dep["name"]]
+                entry = dependencies.get(dep["name"], {})
                 entry["relationship"] = "direct"
                 entry["scope"] = "runtime"
 
