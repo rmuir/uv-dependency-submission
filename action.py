@@ -103,7 +103,7 @@ def main():
         "ref": os.environ["GITHUB_REF"],
         "detector": {
             "name": "uv-dependency-submission",
-            "version": "1.0.1",
+            "version": "1.1.0",
             "url": "https://github.com/rmuir/uv-dependency-submission",
         },
     }
