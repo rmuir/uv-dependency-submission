@@ -21,3 +21,14 @@ def test_airflow():
     assert manifest["name"] == "test/airflow/uv.lock"
     assert manifest["file"] == {"source_location": "test/airflow/uv.lock"}
     assert len(manifest["resolved"].keys()) == 113
+
+
+def test_package_false():
+    """
+    Test uv.lock file with references in package.metadata that aren't actually dependencies
+    """
+    manifest = action.uvlock_to_manifest("test/package-false/uv.lock")
+    assert_valid_manifest(manifest)
+    assert manifest["name"] == "test/package-false/uv.lock"
+    assert manifest["file"] == {"source_location": "test/package-false/uv.lock"}
+    assert manifest["resolved"] == {}
