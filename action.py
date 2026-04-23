@@ -26,12 +26,12 @@ def uvlock_to_manifest(filename: str) -> dict[str, Any]:
             # package.metadata.requires-dev exists even for dev dependencies of dependencies
             # and those don't get installed. Let's skip them.
             dev_dependencies = set()
-            for dep in package.get('dev-dependencies', {}).get("dev", []):
+            for dep in package.get("dev-dependencies", {}).get("dev", []):
                 dev_dependencies.add(dep["name"])
 
             # paint development deps first, if they are runtime, it will get overwritten
             for dep in package["metadata"].get("requires-dev", {}).get("dev", []):
-                if not dep["name"] in dev_dependencies:
+                if dep["name"] not in dev_dependencies:
                     continue
                 entry = dependencies[dep["name"]]
                 entry["relationship"] = "direct"
