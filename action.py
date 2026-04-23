@@ -25,7 +25,7 @@ def uvlock_to_manifest(filename: str) -> dict[str, Any]:
         for package in filter(lambda pkg: "metadata" in pkg, data["package"]):
             # package.metadata.requires-dev exists even for dev dependencies of dependencies
             # and those don't get installed. Let's skip them.
-            dev_dependencies = set()
+            dev_dependencies: set[str] = set()
             for dep in package.get("dev-dependencies", {}).get("dev", []):
                 dev_dependencies.add(dep["name"])
 
