@@ -1,0 +1,33 @@
+name: Integration tests
+on:
+  workflow_dispatch:
+  push:
+    branches: ['main']
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Run "integration test" that submits all dependencies to this repository.
+# This includes all uv.lock files in the test/ directory.
+#
+# Results can be seen in the dependency graph of this project.
+# Repository dependabot rule is configured to dismiss security alerts from test/ files.
+# Dependabot is configured to not create update PRs for test/ files.
+jobs:
+  submit:
+    name: Submit test data
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write # needs to submit dependency graph data
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Submit uv dependencies
+        uses: ./
