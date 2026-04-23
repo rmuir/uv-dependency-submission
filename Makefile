@@ -3,7 +3,7 @@ SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
 .PHONY: all
-all: lint ## Run all checks
+all: lint test ## Run all checks
 
 .PHONY: lint lint-ruff lint-ruff-format lint-ruff-problems lint-basedpyright
 lint: lint-ruff lint-basedpyright ## Lint problems in sources
@@ -36,6 +36,11 @@ fix-ruff-format: ## Fix python formatting
 fix-ruff-problems: ## Fix python problems
 	# autofix python sources: safe fixes only
 	uv run ruff check --fix
+
+# Testing
+.PHONY: test
+test: ## Run tests
+	uv run pytest
 
 .PHONY: help
 help: ## Display this help screen
