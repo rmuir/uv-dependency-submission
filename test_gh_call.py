@@ -1,6 +1,6 @@
 import subprocess
 import sys
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 import pytest
 
@@ -30,7 +30,7 @@ def test_retrying_check_output_happy_path():
     )
 
 
-def test_retrying_check_output_retries_on_500(mock_sleep):
+def test_retrying_check_output_retries_on_500(mock_sleep: MagicMock):
     cmd = ["gh", "api", "some/endpoint"]
     input_data = '{"key": "value"}'
     expected_output = "Dependency submission successful!\n"
@@ -52,7 +52,7 @@ def test_retrying_check_output_retries_on_500(mock_sleep):
     mock_sleep.assert_called_once_with(1)
 
 
-def test_retrying_check_output_no_retry_on_empty_output(mock_sleep):
+def test_retrying_check_output_no_retry_on_empty_output(mock_sleep: MagicMock):
     cmd = ["gh", "api", "some/endpoint"]
     input_data = '{"key": "value"}'
 
@@ -67,7 +67,7 @@ def test_retrying_check_output_no_retry_on_empty_output(mock_sleep):
     mock_sleep.assert_not_called()
 
 
-def test_retrying_check_output_retries_on_server_error(mock_sleep):
+def test_retrying_check_output_retries_on_server_error(mock_sleep: MagicMock):
     cmd = ["gh", "api", "some/endpoint"]
     input_data = '{"key": "value"}'
     expected_output = "Dependency submission successful!\n"
@@ -89,7 +89,7 @@ def test_retrying_check_output_retries_on_server_error(mock_sleep):
     mock_sleep.assert_called_once_with(1)
 
 
-def test_retrying_check_output_exhausts_retries(mock_sleep):
+def test_retrying_check_output_exhausts_retries(mock_sleep: MagicMock):
     cmd = ["gh", "api", "some/endpoint"]
     input_data = '{"key": "value"}'
 
