@@ -85,6 +85,9 @@ def retrying_check_output(cmd: list[str], *, input: str) -> str:
             sys.stderr.flush()
             print(e.output)
             sys.stdout.flush()
+            # low-level error, no HTTP response json, just fail
+            if len(e.output) == 0:
+                raise
             body = json.loads(e.output)
             if body.get("message", "") == "Server Error":
                 pass
