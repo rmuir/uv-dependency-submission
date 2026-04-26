@@ -82,9 +82,18 @@ def retrying_check_output(cmd: list[str], *, input: str) -> str:
             return output
         except subprocess.CalledProcessError as e:
             last_err = e
+            sys.stderr.flush()
             print(e.output)
+            sys.stdout.flush()
+            # low-level error, no HTTP response json, just fail
+            if len(e.output) == 0:
+                raise
             body = json.loads(e.output)
-            if body["status"] not in retryable_statuses:
+            if body.get("message", "") == "Server Error":
+                pass
+            elif body.get("status", "") in retryable_statuses:
+                pass
+            else:
                 raise
 
     print(f"{RED}Command failed, no more retries{END}")
