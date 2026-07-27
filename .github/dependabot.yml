@@ -4,10 +4,13 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
-      day: sunday
+      interval: monthly
     cooldown:
       default-days: 7
+    groups:
+      Actions:
+        patterns:
+          - "*"
     commit-message:
       prefix: ci
     labels:
@@ -18,10 +21,13 @@ updates:
     exclude-paths:
       - test/**
     schedule:
-      interval: weekly
-      day: sunday
+      interval: monthly
     cooldown:
       default-days: 7
+    groups:
+      Python:
+        patterns:
+          - "*"
     commit-message:
       prefix: ci
     labels:
