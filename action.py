@@ -8,8 +8,8 @@ import json
 import os
 import subprocess
 import sys
-from time import sleep
 import tomllib
+from time import sleep
 from typing import Any
 
 
@@ -89,9 +89,7 @@ def retrying_check_output(cmd: list[str], *, input: str) -> str:
             if len(e.output) == 0:
                 raise
             body = json.loads(e.output)
-            if body.get("message", "") == "Server Error":
-                pass
-            elif body.get("status", "") in retryable_statuses:
+            if body.get("message", "") == "Server Error" or body.get("status", "") in retryable_statuses:
                 pass
             else:
                 raise
