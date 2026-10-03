@@ -7,21 +7,17 @@ requires-python = ">=3.12"
 dependencies = []
 
 [dependency-groups]
-dev = [
-  "ruff==0.15.22",
-  "basedpyright==1.39.9",
-  "pytest==9.1.1"
-]
+dev = ["basedpyright==1.39.10", "pytest==9.1.1", "ruff==0.16.4"]
 
 [tool.basedpyright]
 pythonVersion = "3.12"
-exclude = [
-  "data",
-  ".venv"
-]
+exclude = ["data", ".venv"]
 venvPath = "."
 venv = ".venv"
 typeCheckingMode = "strict"
 
 [tool.ruff]
 line-length = 120
+
+[tool.ruff.lint]
+ignore = ["SIM117"]
